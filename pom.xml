@@ -77,7 +77,7 @@
                 <!--<artifactId>tomcat-embed-websocket</artifactId>-->
                 <!--<version>8.0.8</version>-->
             <!--</dependency>-->
-        </dependencies>
+
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
@@ -91,6 +91,7 @@
             <artifactId>jbcrypt</artifactId>
             <version>RELEASE</version>
         </dependency>
+        </dependencies>
 
     <build>
         <plugins>
