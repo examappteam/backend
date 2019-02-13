@@ -1,4 +1,4 @@
-package com.example.authentication.authentication.utility;
+package com.example.user.authentication.utility;
 
 import java.security.SecureRandom;
 import java.util.Locale;

@@ -1,7 +1,7 @@
-package com.example.authentication.authentication.controllers;
+package com.example.user.authentication.controllers;
 
-import backend.shared.models.User;
-import com.example.authentication.authentication.repository.AuthData;
+import com.example.user.authentication.models.authenticationParticipant;
+import com.example.user.authentication.repository.AuthData;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController(
         value = "/auth"
 )
-public class AuthController implements IAuthController {
+public class AuthController {
     Gson gson;
     AuthData authData;
 
@@ -23,7 +23,11 @@ public class AuthController implements IAuthController {
             value = "/login",
             method = RequestMethod.GET
     )
-    public ResponseEntity<?> loginUser(@RequestParam(value = "username") String usernam, @RequestHeader(value = "Authorization") String authkey, userDTO user){
+    public ResponseEntity<?> getUser(@RequestHeader(value = "Authorization") String authkey){
+        return new ResponseEntity<>("test", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> loginUser(authenticationParticipant user){
         return new ResponseEntity<>("test", HttpStatus.OK);
     }
 

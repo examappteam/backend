@@ -1,4 +1,4 @@
-package com.example.authentication.authentication.models;
+package com.example.user.authentication.models;
 
 public class UserWrapper {
     private String token;

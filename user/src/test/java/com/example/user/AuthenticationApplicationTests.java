@@ -1,4 +1,4 @@
-package com.example.authentication;
+package com.example.user;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

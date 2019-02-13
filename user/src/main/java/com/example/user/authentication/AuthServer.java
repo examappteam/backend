@@ -1,4 +1,4 @@
-//package com.example.authentication.authentication;
+//package com.example.user.user;
 //
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
