@@ -2,6 +2,7 @@ package com.example.user.authentication.controllers;
 
 import com.example.user.authentication.models.authenticationParticipant;
 import com.example.user.authentication.repository.AuthData;
+import com.example.user.authentication.service.AuthService;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,23 +13,21 @@ import org.springframework.web.bind.annotation.*;
 )
 public class AuthController {
     Gson gson;
-    AuthData authData;
+    AuthService service;
 
     public AuthController() {
         gson = new Gson();
-        authData = new AuthData();
+        service = new AuthService();
     }
 
-    @RequestMapping(
-            value = "/login",
-            method = RequestMethod.GET
-    )
-    public ResponseEntity<?> getUser(@RequestHeader(value = "Authorization") String authkey){
-        return new ResponseEntity<>("test", HttpStatus.OK);
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyToken(@RequestHeader(value = "Authorization") String authkey){
+        return service.verifyToken(authkey);
     }
 
-    public ResponseEntity<?> loginUser(authenticationParticipant user){
-        return new ResponseEntity<>("test", HttpStatus.OK);
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody authenticationParticipant user){
+        return service.loginUser(user);
     }
 
 

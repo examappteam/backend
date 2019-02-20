@@ -1,6 +1,7 @@
 package com.example.user.user.service;
 
 import com.example.user.user.models.User;
+import com.example.user.user.payload.GetUserResponsePayload;
 import com.example.user.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,9 @@ public class UserService {
             return null;
         }
         return userRepository.save(user);
+    }
+
+    public User getUser(String email){
+        return userRepository.getUserByEmail(email);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.user.user.models;
 
-import com.example.user.registration.model.Role;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 

@@ -1,12 +1,16 @@
 package com.example.user.authentication.models;
 
+import java.time.LocalDateTime;
+
 public class UserWrapper {
     private String token;
-    private int userId;
+    private String userEmail;
+    private LocalDateTime expiredTime;
 
-    public UserWrapper(String token, int userId){
+    public UserWrapper(String token, String userEmail, LocalDateTime expiredTime){
         this.token = token;
-        this.userId = userId;
+        this.userEmail = userEmail;
+        this.expiredTime = expiredTime;
     }
 
     public String getToken() {
@@ -17,11 +21,19 @@ public class UserWrapper {
         this.token = token;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public LocalDateTime getExpiredTime() {
+        return expiredTime;
+    }
+
+    public void setExpiredTime(LocalDateTime expiredTime) {
+        this.expiredTime = expiredTime;
     }
 }
