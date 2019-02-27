@@ -1,17 +1,17 @@
-package backend;
+package com.example.zuulgateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ExamappApplication extends SpringBootServletInitializer {
+@EnableZuulProxy
+public class ZuulGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExamappApplication.class, args);
+        SpringApplication.run(ZuulGatewayApplication.class, args);
     }
 
 }
-

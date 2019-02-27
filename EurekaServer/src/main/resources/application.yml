@@ -1,0 +1,21 @@
+# =======================================
+# = Application Configuration
+# =======================================
+spring:
+  application:
+    name: ExamappEurekaServer
+
+# =======================================
+# = Server Configuration
+# =======================================
+server:
+  port: 22500
+
+# =======================================
+# = Eureka Configuration
+# =======================================
+eureka:
+  client:
+    service-url.defaultZone: http://localhost:22500/eureka/
+    register-with-eureka: false
+    fetch-registry: false

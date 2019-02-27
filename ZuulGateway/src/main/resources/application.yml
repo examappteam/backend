@@ -1,0 +1,60 @@
+# =======================================
+# = Link Configuration
+# =======================================
+
+# =======================================
+# = Server Configuration
+# =======================================
+server:
+  port: 22501
+
+# =======================================
+# = Spring Configuration
+# =======================================
+spring:
+  application:
+    name: zuul-gateway
+
+# =======================================
+# = Eureka Configuration
+# =======================================
+eureka:
+  instance:
+    prefer-ip-address: false
+  client:
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:22500/eureka
+
+
+# =======================================
+# = Management Configuration
+# =======================================
+management:
+  endpoint:
+    routes:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+# =======================================
+# = Zuul Configuration
+# =======================================
+zuul:
+  ignored-services: '*'
+  routes:
+    users:
+      path: /user/**
+      service-id: user-service
+      url: http://localhost:22502/
+    main:
+      path: /main/**
+      service-id: main-service
+      url: http://localhost:22503/
+    notification:
+      path: /notification/**
+      service-id: notification-service
+      url: http://localhost:22504/
