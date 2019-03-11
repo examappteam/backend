@@ -15,9 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@RestController(
-        value = "/users/"
-)
+@RestController()
 public class UserController {
 
     @Autowired
@@ -25,7 +23,7 @@ public class UserController {
 
     @GetMapping("/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String email){
-        return new ResponseEntity<>(new GetUserResponsePayload(userService.getUser(email)), HttpStatus.OK);
+        return new ResponseEntity<>(new GetUserResponsePayload(userService.getUserWithoutPassword(email)), HttpStatus.OK);
     }
 
     @GetMapping("exists/{email}")

@@ -11,7 +11,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,7 +28,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     Gson gson;
     Logger LOGGER_ = Logger.getLogger(this.getClass().getName());
 
-    public TokenAuthenticationFilter(JwtConfig jwtConfig) {
+    public TokenAuthenticationFilter() {
         gson = new Gson();
     }
 
@@ -42,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 
         // 2. validate the header and check the prefix
-        if(header == null || !header.startsWith(jwtConfig.getPrefix())) {
+        if(header == null || !header.startsWith("Bearer ")){
             chain.doFilter(request, response);  		// If not valid, go to the next filter.
             return;
         }
@@ -77,28 +76,23 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {	// exceptions might be thrown in creating the claims if for example the token is expired
 
             // 4. Validate the token
-            Claims claims = Jwts.parser()
-                    .setSigningKey(jwtConfig.getSecret().getBytes())
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            if(!username.equals("") && username != null) {
+            if(!username.equals("")) {
                 @SuppressWarnings("unchecked")
-                List<String> authorities = (List<String>) claims.get("authorities");
 
                 // 5. Create auth object
-                // UsernamePasswordAuthenticationToken: A built-in object, used by spring to represent the current authenticated / being authenticated user.
+                // UsernamePasswordAuthenticationToken: A built-in object, used by spring to represent the current authenticated / being authenticated securityUser.
                 // It needs a list of authorities, which has type of GrantedAuthority interface, where SimpleGrantedAuthority is an implementation of that interface
                 String getuserquery = "http://localhost:22502/" + username;
                 HttpGet httpGet = new HttpGet(getuserquery);
-                User user = new User();
+                SecurityUser securityUser = null;
                 try (CloseableHttpClient httpClient = HttpClients.createDefault();
                      CloseableHttpResponse verifyResponse = httpClient.execute(httpGet)) {
 
                     HttpEntity entity = verifyResponse.getEntity();
                     final String entityString = EntityUtils.toString(entity);
 
-                    user = gson.fromJson(entityString, User.class);
+                    securityUser = gson.fromJson(entityString, SecurityUser.class);
+                    securityUser.token = token;
 
                 } catch (IOException e) {
                     LOGGER_.log(Level.SEVERE, e.toString(), e);
@@ -106,10 +100,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
                 // https://stackoverflow.com/a/51929117/10524573
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        username, null, user.getAuthorities());
+                        username, null, securityUser.getAuthorities());
 
-                // 6. Authenticate the user
-                // Now, user is authenticated
+                // 6. Authenticate the securityUser
+                // Now, securityUser is authenticated
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
 

@@ -39,7 +39,7 @@ public class AuthData {
     public String getUserPassword(String email) {
         UserService userService = new UserService();
         if(userService.userExistsByEmail(email)){
-            return userService.getUser(email).getPassword();
+            return userService.getUserWithPassword(email).getPassword();
         } else{
             throw new UsernameNotFoundException("User does not exist.");
         }

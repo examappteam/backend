@@ -13,6 +13,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public boolean userExistsByEmail(String email){
+        userRepository.save(hardCodedUser());
         return userRepository.existsByEmail(email);
     }
 
@@ -24,6 +25,17 @@ public class UserService {
     }
 
     public User getUser(String email){
+        User user = userRepository.getUserByEmail(email);
+        user.setPassword("");
+        return user;
+    }
+
+    public User getUserWithPassword(String email){
+        userRepository.save(hardCodedUser());
         return userRepository.getUserByEmail(email);
+    }
+
+    private User hardCodedUser(){
+        return new User("test@test.com", "Eindhoven Oulu", "test", "STUDENT");
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RegistrationController {
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<?> createUser(@RequestBody SignUpRequestPayload signUpRequestPayload){
         RegistrationService service = new RegistrationService();
         return service.createUser(signUpRequestPayload);

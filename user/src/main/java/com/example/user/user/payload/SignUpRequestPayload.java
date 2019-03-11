@@ -21,7 +21,7 @@ public class SignUpRequestPayload {
     private String password;
 
     @NotBlank
-    private Role role;
+    private String role;
 
     public SignUpRequestPayload(){
 
