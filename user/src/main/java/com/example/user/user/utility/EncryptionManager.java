@@ -1,4 +1,4 @@
-package com.example.user.registration.utility;
+package com.example.user.user.utility;
 
 import org.mindrot.jbcrypt.BCrypt;
 

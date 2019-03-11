@@ -1,19 +1,15 @@
 package com.example.user.user.controllers;
 
+import com.example.user.user.models.User;
+import com.example.user.user.models.UserResource;
 import com.example.user.user.payload.GetUserResponsePayload;
 import com.example.user.user.payload.SignUpRequestPayload;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import com.example.user.user.models.User;
 import com.example.user.user.payload.UserAvailableResponsePayload;
-import com.example.user.user.repository.UserRepository;
 import com.example.user.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController()
 public class UserController {
@@ -31,20 +27,16 @@ public class UserController {
         return new UserAvailableResponsePayload(userService.userExistsByEmail(email));
     }
 
-    @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody SignUpRequestPayload signUpRequest){
-        User user = new User(signUpRequest.getEmail(), signUpRequest.getFullName(), signUpRequest.getPassword(), signUpRequest.getRole());
+    @PostMapping("/users")
+    public ResponseEntity<?> create(@RequestBody SignUpRequestPayload signUpRequestPayload){
+        User user = new User(signUpRequestPayload.getEmail(), signUpRequestPayload.getFullName(), signUpRequestPayload.getPassword(), signUpRequestPayload.getRole());
 
-        User result = userService.saveUser(user);
+        ResponseEntity<UserResource> result = userService.create(user);
 
         if(result == null){
-            ResponseEntity.ok("User already exists");
+            return ResponseEntity.ok("User already exists");
+        } else {
+            return result;
         }
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/users/")
-                .buildAndExpand(result.getEmail()).toUri();
-
-        return ResponseEntity.created(location).body("User registration successful");
     }
 }
