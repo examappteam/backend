@@ -1,6 +1,5 @@
 package com.example.user.user.payload;
 
-import com.example.user.user.models.Role;
 import com.example.user.user.models.User;
 import lombok.Data;
 
@@ -19,7 +18,7 @@ public class GetUserResponsePayload {
     private String email;
 
     @NotBlank
-    private Role role;
+    private String role;
 
     public GetUserResponsePayload(){
 

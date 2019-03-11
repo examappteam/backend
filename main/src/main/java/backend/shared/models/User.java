@@ -1,6 +1,5 @@
 package backend.shared.models;
 
-import backend.shared.enums.Role;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -14,13 +13,13 @@ public class User {
     private String name;
     @Id
     private String email;
-    private Role role;
+    private String role;
 
     public User(){
 
     }
 
-    public User(String name, String email, Role role) {
+    public User(String name, String email, String role) {
         this.name = name;
         this.email = email;
         this.role = role;

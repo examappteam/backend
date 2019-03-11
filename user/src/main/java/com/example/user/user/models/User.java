@@ -27,6 +27,10 @@ public class User {
 
     private String role;
 
+    public User(){
+
+    }
+
     public User(@Email String email, String fullName, String password, String role) {
         this.email = email;
         this.fullName = fullName;

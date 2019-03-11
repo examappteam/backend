@@ -5,20 +5,24 @@ import com.example.user.authentication.models.authenticationParticipant;
 import com.example.user.authentication.repository.AuthData;
 import com.example.user.authentication.utility.Password;
 import com.example.user.authentication.utility.RandomString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class AuthService {
 
+    @Autowired
     AuthData data;
 
     public AuthService(){
-        data = new AuthData();
+
     }
 
     public ResponseEntity loginUser(authenticationParticipant participant){
@@ -39,13 +43,15 @@ public class AuthService {
         }
     }
 
-    public ResponseEntity verifyToken(String token) {
+    public String verifyToken(String token) {
         try{
-            return new ResponseEntity<>(data.getEmailByAuthKey(token), HttpStatus.OK);
+            return data.getEmailByAuthKey(token);
         } catch (AuthenticationCredentialsNotFoundException ex){
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return "Unauthorized";
+//            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         } catch (CredentialsExpiredException ex){
-            return new ResponseEntity<>("Expired Token Error", HttpStatus.BAD_REQUEST);
+            return "Expired Token Error";
+//            return new ResponseEntity<>("Expired Token Error", HttpStatus.BAD_REQUEST);
         }
     }
 }

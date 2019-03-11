@@ -4,9 +4,6 @@ import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -19,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,14 +51,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         // 3. Get the token
         String token = header.replace("Bearer ", "");
 
-        String query = "http://localhost:22502/verify";
-        HttpPost httpPost = new HttpPost(query);
+        String query = "http://localhost:22502/auth/verify";
+        HttpGet httpGet = new HttpGet(query);
         String username = new String();
-        String test = gson.toJson(token);
-        StringEntity params = new StringEntity(test, ContentType.APPLICATION_JSON);
-        httpPost.setEntity(params);
+        httpGet.setHeader("Authorization", token);
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
-             CloseableHttpResponse verifyResponse = httpClient.execute(httpPost)) {
+             CloseableHttpResponse verifyResponse = httpClient.execute(httpGet)) {
 
             HttpEntity entity = verifyResponse.getEntity();
             final String entityString = EntityUtils.toString(entity);
@@ -83,10 +77,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 // UsernamePasswordAuthenticationToken: A built-in object, used by spring to represent the current authenticated / being authenticated securityUser.
                 // It needs a list of authorities, which has type of GrantedAuthority interface, where SimpleGrantedAuthority is an implementation of that interface
                 String getuserquery = "http://localhost:22502/" + username;
-                HttpGet httpGet = new HttpGet(getuserquery);
+                HttpGet httpGet2 = new HttpGet(getuserquery);
                 SecurityUser securityUser = null;
                 try (CloseableHttpClient httpClient = HttpClients.createDefault();
-                     CloseableHttpResponse verifyResponse = httpClient.execute(httpGet)) {
+                     CloseableHttpResponse verifyResponse = httpClient.execute(httpGet2)) {
 
                     HttpEntity entity = verifyResponse.getEntity();
                     final String entityString = EntityUtils.toString(entity);

@@ -22,17 +22,18 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public User getUser(String email){
-        return userRepository.getUserByEmail(email);
-    }
-
     public ResponseEntity<UserResource> create(User user){
-
         user.setPassword(EncryptionManager.hashPassword(user.getPassword()));
 
-        User createdUser = saveUser(user);
+        if(userExistsByEmail(user.getEmail())){
+            // todo: throw error
+            return null;
+        }
+
+        User createdUser = userRepository.save(user);
 
         if(createdUser == null){
+            // todo: throw error
             return null;
         }
 
@@ -42,15 +43,6 @@ public class UserService {
         return ResponseEntity.created(uri).body(resource);
     }
 
-
-
-    private User saveUser(User user){
-        if(userExistsByEmail(user.getEmail())){
-            return null;
-        }
-        return userRepository.save(user);
-    }
-
     public User getUser(String email){
         User user = userRepository.getUserByEmail(email);
         user.setPassword("");
@@ -58,11 +50,12 @@ public class UserService {
     }
 
     public User getUserWithPassword(String email){
-        userRepository.save(hardCodedUser());
         return userRepository.getUserByEmail(email);
     }
 
     private User hardCodedUser(){
-        return new User("test@test.com", "Eindhoven Oulu", "test", "STUDENT");
+        String passwordBeforeHash = "test";
+        String passwordHashed = EncryptionManager.hashPassword(passwordBeforeHash);
+        return new User("test@test.com", "Eindhoven Oulu", passwordHashed, "STUDENT");
     }
 }

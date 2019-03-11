@@ -1,22 +1,23 @@
 package com.example.user.authentication.repository;
 
 import com.example.user.authentication.models.UserWrapper;
-import com.example.user.authentication.models.authenticationParticipant;
 import com.example.user.authentication.utility.RandomString;
-import com.example.user.user.controllers.UserController;
 import com.example.user.user.service.UserService;
-import org.hibernate.cfg.NotYetImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Logger;
 
+@Component
 public class AuthData {
+
+    @Autowired
+    private UserService userService;
 
     protected static final ArrayList<UserWrapper> loggedinusers = new ArrayList<>();
     static RandomString session = new RandomString();
@@ -37,7 +38,6 @@ public class AuthData {
     }
 
     public String getUserPassword(String email) {
-        UserService userService = new UserService();
         if(userService.userExistsByEmail(email)){
             return userService.getUserWithPassword(email).getPassword();
         } else{
