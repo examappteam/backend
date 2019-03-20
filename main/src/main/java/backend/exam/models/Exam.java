@@ -1,6 +1,6 @@
 package backend.exam.models;
 
-import backend.shared.models.User;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,11 +12,11 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @OneToMany
     private List<Question> questions;
 
-    @ManyToOne
-    private User creator;
+    private Long creatorId;
 
     public long getId() {
         return id;
@@ -34,11 +34,11 @@ public class Exam {
         this.questions = questions;
     }
 
-    public User getCreator() {
-        return creator;
+    public Long getCreatorId() {
+        return creatorId;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
     }
 }

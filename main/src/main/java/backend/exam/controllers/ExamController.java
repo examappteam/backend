@@ -1,13 +1,19 @@
 package backend.exam.controllers;
 
 import backend.exam.models.Exam;
+import backend.exam.models.ExamDTO;
 import backend.exam.models.ExamResource;
+import backend.exam.models.Question;
 import backend.exam.repository.ExamRepository;
 import backend.exam.repository.QuestionRepository;
 import backend.shared.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 public class ExamController {
@@ -18,18 +24,21 @@ public class ExamController {
     private QuestionRepository questionRepo;
 
     @PostMapping("/exam")
-    public ResponseEntity<?> create(){
+    public ResponseEntity<?> create(@Valid @RequestBody ExamDTO examDTO){
 
-        // todo: implement
-        
+        // TODO: once authorization works, limit this to teacher role.
 
-        return null;
+        // note: creator id is not checked, because that is against the microservice architecture. We assume it is correct.
+        Exam exam = examRepo.save(examDTO.toExam());
+        return ResponseEntity.ok().body(new ExamResource(exam));
+
+//        URI uri = MvcUriComponentsBuilder.fromController(getClass())
+//                .path("/{id}").buildAndExpand(exam.getId()).toUri();
+//        return ResponseEntity.created(uri).body(new ExamResource(exam));
     }
 
     @GetMapping("/exam/{id}")
     public ResponseEntity<?> getOne(@PathVariable long id){
-        // todo: remove dummy Exam. But this works for requesting id 1, of course.
-        examRepo.save(new Exam());
         return examRepo.findById(id).map(s -> ResponseEntity.ok(new ExamResource(s)))
                 .orElseThrow(() -> new ResourceNotFoundException(Exam.class));
     }
