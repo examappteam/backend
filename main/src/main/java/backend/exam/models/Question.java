@@ -12,14 +12,43 @@ import javax.persistence.Id;
 public class Question {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    public QuestionType type;
+    private int weightPercentage;
 
-    public String question;
+    private String description;
 
-    public String answer;
+    private String answer;
 
-//    @OneToMany
-//    public List<String> multipleChoice;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getWeightPercentage() {
+        return weightPercentage;
+    }
+
+    public void setWeightPercentage(int weightPercentage) {
+        this.weightPercentage = weightPercentage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 }
