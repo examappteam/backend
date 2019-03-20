@@ -2,6 +2,7 @@ package backend.exam.models;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ public class Exam {
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     private Long creatorId;
 
@@ -29,7 +30,9 @@ public class Exam {
     }
 
     public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+        // retain the same list will make jpa object tracking easier
+        this.questions.clear();
+        this.questions.addAll(questions);
     }
 
     public Long getCreatorId() {
