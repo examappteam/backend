@@ -1,6 +1,5 @@
 package backend.exam.models;
 
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,8 +11,7 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions;
 
     private Long creatorId;
