@@ -1,6 +1,8 @@
 # =======================================
-# = Link Configuration
+# = JWT Configuration
 # =======================================
+jwtSecret: jwtSecretKey
+jwtExpiration: 86400 # -> 1 day
 
 # =======================================
 # = Server Configuration
@@ -47,16 +49,21 @@ zuul:
   sensitive-headers: Cookie,Set-Cookie
   ignored-services: '*'
   routes:
-    users:
-      path: /user/**
-      service-id: user-service
+    authentication:
+      path: /auth/**
+      service-id: authentication-service
       url: http://localhost:22502/
+    testing:
+      path: /test/**
+      service-id: testing-service
+      url: http://localhost:22503/
     main:
       path: /main/**
       service-id: main-service
-      url: http://localhost:22503/
+      url: http://localhost:22504/
     notification:
       path: /notification/**
       service-id: notification-service
-      url: http://localhost:22504/
+      url: http://localhost:22505/
+
 

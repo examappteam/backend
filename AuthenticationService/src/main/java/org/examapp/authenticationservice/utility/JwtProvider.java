@@ -2,10 +2,14 @@ package org.examapp.authenticationservice.utility;
 
 import io.jsonwebtoken.*;
 import org.examapp.authenticationservice.security.AccountPrinciple;
+import org.examapp.authenticationservice.service.AccountDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -21,11 +25,18 @@ public class JwtProvider {
     @Value("${jwtExpiration}")
     private int jwtExpiration;
 
+    @Autowired
+    private AccountDetailsServiceImpl accountDetailsService;
+
     public String generateJwtToken(Authentication authentication) {
 
         AccountPrinciple accountPrincipal = (AccountPrinciple) authentication.getPrincipal();
 
+        Claims claims = Jwts.claims().setSubject(accountPrincipal.getUsername());
+        claims.put("AUTH", accountPrincipal.getAuthorities());
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject((accountPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpiration*1000))
@@ -57,5 +68,13 @@ public class JwtProvider {
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
+    }
+
+    public Authentication getAuthentication(String token){
+        // Call loadByUserName method
+        UserDetails userDetails = accountDetailsService.loadUserByUsername(getUserNameFromJwtToken(token));
+
+        // Return the stuff that needs to be held in the security context holder
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }

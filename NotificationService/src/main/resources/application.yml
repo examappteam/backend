@@ -9,7 +9,7 @@ jwtExpiration: 86400 # -> 1 day
 # = Server Configuration
 # =======================================
 server:
-  port: 22504
+  port: 22505
 
 
 # =======================================
@@ -17,7 +17,7 @@ server:
 # =======================================
 spring:
   application:
-    name: main-service
+    name: notification-service
   h2:
     console:
       enabled: true
@@ -43,4 +43,4 @@ eureka:
     service-url:
       defaultZone: http://localhost:22500/eureka
   instance:
-    prefer-ip-address: false
+    prefer-ip-address: true

@@ -1,23 +1,21 @@
 # =======================================
+# = Server Configuration
+# =======================================
+server:
+  port: 22503
+
+# =======================================
 # = JWT Configuration
 # =======================================
 jwtSecret: jwtSecretKey
 jwtExpiration: 86400 # -> 1 day
-
-
-# =======================================
-# = Server Configuration
-# =======================================
-server:
-  port: 22504
-
 
 # =======================================
 # = Spring Configuration
 # =======================================
 spring:
   application:
-    name: main-service
+    name: testing-service
   h2:
     console:
       enabled: true
@@ -43,4 +41,4 @@ eureka:
     service-url:
       defaultZone: http://localhost:22500/eureka
   instance:
-    prefer-ip-address: false
+    prefer-ip-address: true

@@ -30,6 +30,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+  application:
+    name: authentication-service
 
 # =======================================
 # = Eureka Configuration
