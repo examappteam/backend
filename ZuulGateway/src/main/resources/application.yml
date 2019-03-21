@@ -44,6 +44,7 @@ management:
 # = Zuul Configuration
 # =======================================
 zuul:
+  sensitive-headers: Cookie,Set-Cookie
   ignored-services: '*'
   routes:
     users:
@@ -58,3 +59,4 @@ zuul:
       path: /notification/**
       service-id: notification-service
       url: http://localhost:22504/
+
