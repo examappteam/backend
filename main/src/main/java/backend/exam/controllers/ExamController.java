@@ -8,6 +8,7 @@ import backend.exam.repository.ExamRepository;
 import backend.shared.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,9 +22,8 @@ public class ExamController {
     private ExamRepository examRepo;
 
     @PostMapping("/exam")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<?> create(@Valid @RequestBody ExamDTO examDTO){
-
-        // TODO: once authorization works, limit this to teacher role.
 
         // note: creator id is not checked for Teacher role, because people say it goes against the microservice architecture.
         // This creates a vulnerability: a user logged in as a Teacher can create exams with incorrect creatorId.
@@ -33,18 +33,16 @@ public class ExamController {
     }
 
     @GetMapping("/exam/{id}")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<?> getOne(@PathVariable long id){
-
-        // TODO: once authorization works, limit this to teacher role.
 
         return examRepo.findById(id).map(s -> ResponseEntity.ok(new ExamResource(s)))
                 .orElseThrow(() -> new ResourceNotFoundException(Exam.class));
     }
 
     @PutMapping("/exam/{id}")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody ExamDTO examDTO){
-
-        // TODO: once authorization works, limit this to teacher role.
 
         // note: creator id is not checked for Teacher role, because people say it goes against the microservice architecture.
         // This creates a vulnerability: a user logged in as a Teacher can update ANY exam and lie about who did it.
@@ -69,9 +67,8 @@ public class ExamController {
     }
 
     @DeleteMapping("/exam/{id}")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<?> delete(@PathVariable long id){
-
-        // TODO: once authorization works, limit this to teacher role.
 
         // note: creator id is not checked for Teacher role, because people say it goes against the microservice architecture.
         // This creates a vulnerability: a user logged in as a Teacher can delete ANY exam.
@@ -83,16 +80,12 @@ public class ExamController {
     @PutMapping("/exam/{id}/student")
     public ResponseEntity<?> updateStudent(@PathVariable long id){
 
-        // TODO: once authorization works, limit this to teacher role.
-
         // todo: implement
         return null;
     }
 
     @PostMapping("/exam/{id}/student")
     public ResponseEntity<?> deleteStudent(@PathVariable long id){
-
-        // TODO: once authorization works, limit this to teacher role.
 
         // todo: implement
         return null;

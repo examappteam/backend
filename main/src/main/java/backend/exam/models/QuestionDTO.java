@@ -26,7 +26,7 @@ public class QuestionDTO {
 
     private Question toQuestion() {
         Question result = new Question();
-        result.setWeightPercentage(this.weightPercentage);
+        result.setWeight(this.weightPercentage);
         result.setDescription(this.description);
         result.setAnswer(this.answer);
         return result;

@@ -1,23 +1,21 @@
 package backend.exam.models;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ExamDTO {
-    @NotNull
-    private Long creatorId;
+    private String creatorId;
 
-    @NotNull @NotEmpty
+    @NotNull
     private List<QuestionDTO> questionDTOs;
 
-    public Long getCreatorId() {
+    private String title;
+
+    public String getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Long creatorId) {
+    public void setCreatorId(String creatorId) {
         this.creatorId = creatorId;
     }
 
@@ -29,9 +27,18 @@ public class ExamDTO {
         this.questionDTOs = questionDTOs;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Exam toExam() {
         Exam result = new Exam();
         result.setCreatorId(this.creatorId);
+        result.setTitle(this.title);
 
         List<Question> questions = QuestionDTO.mapList(this.questionDTOs);
         result.setQuestions(questions);

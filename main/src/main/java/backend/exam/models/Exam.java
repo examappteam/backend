@@ -15,7 +15,9 @@ public class Exam {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
-    private Long creatorId;
+    private String creatorId;
+
+    private String title;
 
     public long getId() {
         return id;
@@ -35,11 +37,19 @@ public class Exam {
         this.questions.addAll(questions);
     }
 
-    public Long getCreatorId() {
+    public String getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Long creatorId) {
+    public void setCreatorId(String creatorId) {
         this.creatorId = creatorId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
