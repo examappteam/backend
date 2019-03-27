@@ -14,7 +14,7 @@ public class Question {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int weightPercentage;
+    private int weight;
 
     private String description;
 
@@ -28,12 +28,12 @@ public class Question {
         this.id = id;
     }
 
-    public int getWeightPercentage() {
-        return weightPercentage;
+    public int getWeight() {
+        return weight;
     }
 
-    public void setWeightPercentage(int weightPercentage) {
-        this.weightPercentage = weightPercentage;
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public String getDescription() {
