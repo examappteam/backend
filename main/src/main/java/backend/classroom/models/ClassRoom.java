@@ -1,7 +1,6 @@
 package backend.classroom.models;
 
 import backend.course.models.Course;
-import backend.shared.models.User;
 import lombok.Data;
 import javax.persistence.*;
 import java.util.List;
@@ -14,14 +13,15 @@ public class ClassRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
 
-    public String name;
+    @Column(unique=true)
+    public String className;
 
-    @OneToMany
+    @ManyToMany
     public List<Course> courses;
 
     @ManyToMany
-    public List<User> students;
+    public List<Student> students;
 
-    @OneToOne
-    public User teacher;
+    @ManyToMany
+    public List<Teacher> teacher;
 }
