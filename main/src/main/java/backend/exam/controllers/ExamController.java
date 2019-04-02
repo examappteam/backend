@@ -18,8 +18,12 @@ import java.util.Optional;
 @RestController
 public class ExamController {
 
+    private final ExamRepository examRepo;
+
     @Autowired
-    private ExamRepository examRepo;
+    public ExamController(ExamRepository examRepo) {
+        this.examRepo = examRepo;
+    }
 
     @PostMapping("/exam")
     @PreAuthorize("hasRole('ROLE_TEACHER')")
