@@ -1,4 +1,4 @@
-package backend.utility;
+package backend.chatroom.utility;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -11,14 +11,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry brokerRegistry){
+    public void configureMessageBroker(MessageBrokerRegistry brokerRegistry) {
         brokerRegistry.setApplicationDestinationPrefixes("/app")
                 .enableSimpleBroker("/topic");
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry endpointRegistry){
+    public void registerStompEndpoints(StompEndpointRegistry endpointRegistry) {
         endpointRegistry.addEndpoint("/chat").withSockJS();
-        endpointRegistry.addEndpoint("/chatroom").withSockJS();
     }
 }

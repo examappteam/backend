@@ -16,13 +16,13 @@ public class ChatController {
         return message;
     }
 
-    @MessageMapping("room.{id}.leave")
+    @MessageMapping("/room.{id}.leave")
     @SendTo("/topic/room.{id}")
     public LeaveMessage leaveRoom(@DestinationVariable("id") String id, LeaveMessage message) {
         return message;
     }
 
-    @MessageMapping("room.{id}.message")
+    @MessageMapping("/room.{id}.message")
     @SendTo("/topic/room.{id}")
     public ChatMessage chatMessage(@DestinationVariable("id") String id, ChatMessage message) {
         return message;
