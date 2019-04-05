@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 public class Role {
-
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +38,10 @@ public class Role {
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return name.name();
+    }
 }

@@ -1,45 +1,70 @@
 package org.examapp.authenticationservice.utility;
 
-import org.examapp.authenticationservice.model.Account;
-import org.examapp.authenticationservice.model.ROLE_NAME;
-import org.examapp.authenticationservice.model.Role;
-import org.examapp.authenticationservice.repository.AccountRepository;
-import org.examapp.authenticationservice.repository.RoleRepository;
+import org.examapp.service.authentication.model.ROLE_NAME;
+import org.examapp.service.authentication.model.Role;
+import org.examapp.service.authentication.model.User;
+import org.examapp.service.authentication.repository.RoleRepository;
+import org.examapp.service.authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataLoader implements ApplicationRunner {
+public class DataLoader implements ApplicationListener<ApplicationReadyEvent> {
+
+    private final RoleRepository roleRepository;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private PasswordEncoder encoder;
+    public DataLoader(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        roleRepository.save(new Role(ROLE_NAME.ROLE_STUDENT));
-        roleRepository.save(new Role(ROLE_NAME.ROLE_TEACHER));
-        roleRepository.save(new Role(ROLE_NAME.ROLE_ADMIN));
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        Role studentRole = new Role(ROLE_NAME.ROLE_STUDENT);
+        Role teacherRole = new Role(ROLE_NAME.ROLE_TEACHER);
+        Role adminRole = new Role(ROLE_NAME.ROLE_ADMIN);
 
-        Account student = new Account("Student", "A","student@examapp.com", "student", encoder.encode("examapp"));
-        student.getRoles().add(roleRepository.findByName(ROLE_NAME.ROLE_STUDENT).get());
+        roleRepository.save(studentRole);
+        roleRepository.save(teacherRole);
+        roleRepository.save(adminRole);
 
-        Account teacher = new Account("Teacher", "A", "teacher@examapp.com", "teacher", encoder.encode("examapp"));
-        teacher.getRoles().add(roleRepository.findByName(ROLE_NAME.ROLE_TEACHER).get());
+        User studentUser = new User();
+        User teacherUser = new User();
+        User adminUser = new User();
 
-        Account admin = new Account("Admin", "A","admin@examapp.com", "admin", encoder.encode("examapp"));
-        admin.getRoles().add(roleRepository.findByName(ROLE_NAME.ROLE_ADMIN).get());
+        studentUser.setFirstName("Student");
+        studentUser.setLastName("Account");
+        studentUser.setEmail("Student.Account@Examapp.com");
+        studentUser.setUsername("StudentAccount");
+        studentUser.setPassword(passwordEncoder.encode("DemoPassword"));
+        studentUser.getRoles().add(studentRole);
 
-        accountRepository.save(student);
-        accountRepository.save(teacher);
-        accountRepository.save(admin);
+        teacherUser.setFirstName("Teacher");
+        teacherUser.setLastName("Account");
+        teacherUser.setEmail("Teacher.Account@Examapp.com");
+        teacherUser.setUsername("TeacherAccount");
+        teacherUser.setPassword(passwordEncoder.encode("DemoPassword"));
+        teacherUser.getRoles().add(teacherRole);
+
+        adminUser.setFirstName("Admin");
+        adminUser.setLastName("Account");
+        adminUser.setEmail("Admin.Account@Examapp.com");
+        adminUser.setUsername("AdminAccount");
+        adminUser.setPassword(passwordEncoder.encode("DemoPassword"));
+        adminUser.getRoles().add(adminRole);
+
+        userRepository.save(studentUser);
+        userRepository.save(teacherUser);
+        userRepository.save(adminUser);
     }
+
 }

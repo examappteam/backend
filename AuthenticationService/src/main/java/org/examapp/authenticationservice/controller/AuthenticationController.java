@@ -1,121 +1,78 @@
 package org.examapp.authenticationservice.controller;
 
 import io.swagger.annotations.ApiOperation;
-import org.examapp.authenticationservice.messages.JwtResponse;
-import org.examapp.authenticationservice.messages.LoginForm;
-import org.examapp.authenticationservice.messages.ResponseMessage;
-import org.examapp.authenticationservice.messages.SignUpForm;
-import org.examapp.authenticationservice.model.Account;
-import org.examapp.authenticationservice.model.ROLE_NAME;
-import org.examapp.authenticationservice.model.Role;
-import org.examapp.authenticationservice.repository.AccountRepository;
-import org.examapp.authenticationservice.repository.RoleRepository;
-import org.examapp.authenticationservice.utility.JwtProvider;
+import org.examapp.service.authentication.request.AuthenticationRequest;
+import org.examapp.service.authentication.request.RegisterRequest;
+import org.examapp.service.authentication.response.JwtTokenResponse;
+import org.examapp.service.authentication.service.AuthenticationService;
+import org.examapp.service.authentication.service.RegisterService;
+import org.examapp.service.authentication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.EntityNotFoundException;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationService authenticationService;
+    private final UserService userService;
+    private final RegisterService registerService;
+
 
     @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private JwtProvider jwtProvider;
-
-    @ApiOperation(
-            value = "Sign into the system",
-            response = JwtResponse.class
-    )
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = jwtProvider.generateJwtToken(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
+    public AuthenticationController(AuthenticationService authenticationService, UserService userService, RegisterService registerService) {
+        this.authenticationService = authenticationService;
+        this.userService = userService;
+        this.registerService = registerService;
     }
 
+    @ApiOperation(
+            value = "Sign in",
+            response = JwtTokenResponse.class
+    )
+    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request) {
+        return new ResponseEntity<>(
+                authenticationService.generateJwtToken(
+                        request.getUsername(),
+                        request.getPassword()),
+                HttpStatus.OK)
+        ;
+    }
 
     @ApiOperation(
-            value = "Sign up an account",
-            response = ResponseMessage.class
+            value = "Sign up"
     )
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpForm signUpRequest) {
-        if (accountRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("Fail admin-> Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
-        }
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
 
-        if (accountRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("Fail -> Email is already in use!"),
-                    HttpStatus.BAD_REQUEST);
-        }
+        if(registerService.existsEmail(request.getEmail()))
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
 
-        // Creating user's account
-        Account account = new Account(signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+        if(registerService.existsUsername(request.getUsername()))
+            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
 
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
+        registerService.register(request);
 
-        strRoles.forEach(role -> {
-            switch (role) {
-                case "admin":
-                    Role adminRole = roleRepository.findByName(ROLE_NAME.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                    roles.add(adminRole);
+        return new ResponseEntity<>(HttpStatus.OK);
 
-                    break;
-                case "teacher":
-                    Role studentRole = roleRepository.findByName(ROLE_NAME.ROLE_TEACHER)
-                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                    roles.add(studentRole);
-
-                    break;
-                default:
-                    Role userRole = roleRepository.findByName(ROLE_NAME.ROLE_STUDENT)
-                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                    roles.add(userRole);
-            }
-        });
-
-        account.setRoles(roles);
-        accountRepository.save(account);
-
-        return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization")String token){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getUserInfo(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 }

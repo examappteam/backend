@@ -1,14 +1,14 @@
 package org.examapp.authenticationservice.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Account {
-
+public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,10 @@ public class Account {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public Account() {
+    public User() {
     }
 
-    public Account(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotBlank String username, @NotBlank @Size(min = 6, max = 256) String password) {
+    public User(@NotBlank String firstName, @NotBlank String lastName, @Email @NotBlank String email, @NotBlank String username, @NotBlank @Size(min = 6, max = 256) String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -107,5 +107,5 @@ public class Account {
         this.roles = roles;
     }
 
-//endregion
+    //endregion
 }

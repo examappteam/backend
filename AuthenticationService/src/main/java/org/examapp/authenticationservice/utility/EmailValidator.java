@@ -5,7 +5,8 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
+public class EmailValidator
+        implements ConstraintValidator<org.examapp.service.authentication.utility.ValidEmail, String> {
 
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" +
@@ -14,7 +15,7 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
     private Matcher matcher;
 
     @Override
-    public void initialize(ValidEmail constraintAnnotation) {
+    public void initialize(org.examapp.service.authentication.utility.ValidEmail constraintAnnotation) {
     }
 
     @Override

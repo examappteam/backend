@@ -1,23 +1,14 @@
-package org.examapp.authenticationservice.messages;
+package org.examapp.authenticationservice.request;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-public class LoginForm {
-
-    @NotBlank
+public class AuthenticationRequest {
     @ApiModelProperty(position = 0)
     private String username;
-
-    @NotBlank
     @ApiModelProperty(position = 1)
-    @Size(min = 6, max = 256)
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getUsername() {        return username;
     }
 
     public void setUsername(String username) {
