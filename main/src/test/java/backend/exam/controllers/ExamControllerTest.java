@@ -3,7 +3,6 @@ package backend.exam.controllers;
 import backend.exam.models.Exam;
 import backend.exam.repository.ExamRepository;
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +10,6 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class ExamControllerTest {
 
@@ -140,6 +137,6 @@ public class ExamControllerTest {
             public <S extends Exam> boolean exists(Example<S> example) {
                 throw new UnsupportedOperationException();
             }
-        });
+        }, service);
     }
 }
