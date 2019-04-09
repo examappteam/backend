@@ -2,8 +2,11 @@ package backend.classroom.models;
 
 import backend.course.models.Course;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -11,17 +14,20 @@ public class ClassRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    private long id;
 
     @Column(unique=true)
-    public String className;
+    private String className;
+
+    @OneToMany
+    private Set<UpcomingExam> upcomingExams;
 
     @ManyToMany
-    public List<Course> courses;
+    private Set<Course> courses;
 
     @ManyToMany
-    public List<Student> students;
+    private Set<Student> students;
 
     @ManyToMany
-    public List<Teacher> teacher;
+    private Set<Teacher> teacher;
 }

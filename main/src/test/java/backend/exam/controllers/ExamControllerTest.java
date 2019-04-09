@@ -2,7 +2,9 @@ package backend.exam.controllers;
 
 import backend.exam.models.Exam;
 import backend.exam.repository.ExamRepository;
+import backend.exam.service.ExamServiceImpl;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -137,6 +139,11 @@ public class ExamControllerTest {
             public <S extends Exam> boolean exists(Example<S> example) {
                 throw new UnsupportedOperationException();
             }
-        }, service);
+        }, new ExamServiceImpl());
+    }
+
+    @Test
+    public void name() {
+
     }
 }

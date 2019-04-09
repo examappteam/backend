@@ -1,5 +1,6 @@
 package backend.classroom.controllers;
 
+import backend.classroom.models.UpcomingExam;
 import backend.classroom.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,4 +63,12 @@ public class ClassRoomController {
         // todo: implement
         return null;
     }
+
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PostMapping("/classroom/{id}/upcoming-exam")
+    public ResponseEntity<?> addUpcomingExam(@RequestBody UpcomingExam exam){
+        // todo: implement
+        return null;
+    }
+
 }
