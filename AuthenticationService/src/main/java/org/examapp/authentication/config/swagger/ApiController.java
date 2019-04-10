@@ -1,4 +1,4 @@
-package org.examapp.authentication.swagger;
+package org.examapp.authentication.config.swagger;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

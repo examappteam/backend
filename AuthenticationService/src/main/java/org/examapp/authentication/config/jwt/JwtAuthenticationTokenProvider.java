@@ -1,4 +1,4 @@
-package org.examapp.authentication.jwt;
+package org.examapp.authentication.config.jwt;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +18,10 @@ import java.util.*;
 public class JwtAuthenticationTokenProvider {
 
     @Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
+    private String secretKey = "jwtSecretKey";
 
     @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h
+    private long validityInMilliseconds = 86400000; // 1Day
 
 
     @PostConstruct
@@ -43,7 +43,7 @@ public class JwtAuthenticationTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
@@ -130,12 +130,6 @@ public class JwtAuthenticationTokenProvider {
         @Override
         public boolean isEnabled() {
             return true;
-        }
-    }
-
-    public class InvalidJwtAuthenticationException extends AuthenticationException {
-        InvalidJwtAuthenticationException(String e) {
-            super(e);
         }
     }
 

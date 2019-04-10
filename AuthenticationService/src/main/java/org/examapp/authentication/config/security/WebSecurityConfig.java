@@ -1,7 +1,7 @@
-package org.examapp.authentication.security;
+package org.examapp.authentication.config.security;
 
-import org.examapp.authentication.jwt.JwtAuthenticationTokenProvider;
-import org.examapp.authentication.jwt.JwtConfigurer;
+import org.examapp.authentication.config.jwt.JwtAuthenticationTokenProvider;
+import org.examapp.authentication.config.jwt.JwtConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package org.examapp.authentication.response;
+package org.examapp.authentication.model.response;
 
 public class JwtTokenResponse {
     private String token;

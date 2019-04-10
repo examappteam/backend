@@ -1,4 +1,4 @@
-package org.examapp.authentication.request;
+package org.examapp.authentication.model.request;
 
 import java.util.Set;
 

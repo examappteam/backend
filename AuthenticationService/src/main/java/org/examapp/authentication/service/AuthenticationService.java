@@ -1,10 +1,10 @@
 package org.examapp.authentication.service;
 
-import org.examapp.authentication.jwt.JwtAuthenticationTokenProvider;
+import org.examapp.authentication.config.jwt.JwtAuthenticationTokenProvider;
 import org.examapp.authentication.model.Role;
 import org.examapp.authentication.model.User;
 import org.examapp.authentication.repository.UserRepository;
-import org.examapp.authentication.response.JwtTokenResponse;
+import org.examapp.authentication.model.response.JwtTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

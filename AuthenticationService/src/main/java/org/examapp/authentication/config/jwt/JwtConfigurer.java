@@ -1,4 +1,4 @@
-package org.examapp.authentication.jwt;
+package org.examapp.authentication.config.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

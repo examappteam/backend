@@ -1,7 +1,7 @@
 package org.examapp.authentication.service;
 
 import org.examapp.authentication.repository.UserRepository;
-import org.examapp.authentication.response.UserResponse;
+import org.examapp.authentication.model.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
